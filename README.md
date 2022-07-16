@@ -1,19 +1,20 @@
 
 
-.. this is some ork with unwanted features in progress. 
+.. this is some ork in progress, with unwanted features.
 
-Due to another memory layout with glibc, I stripped 32bit support.
-So this is a 64bit version, with an overhead of 8Bytes per allocation.
+Due to another memory layout with glibc, I had to convert this to 64bit.
 However, in turn, while this implemenatation works with minilib (and an address layout below 2GB),
-now some bugs seem to be somethere.
+now some bugs seem to be sneaked in somethere.
 
 With fuzzy testing, I do get random segfaults. 
 
 Currently I'm about to blame glibc .. Would it be possible,
 I do have gaps within the movement of the brk?
+It is anyways strange, after moving the brk from e.g. 4 to 400, accessing 200 says segfault.
+
+I leave this online for now, the way it is.
 
 
-I leave this online for now, anyways.
 
 
 
