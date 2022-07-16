@@ -1,4 +1,4 @@
-Release erlay, release often.
+Release early, release often.
 
 Once a wise man said.
 
@@ -6,12 +6,12 @@ Once a wise man said.
 I guess, there's a difference between open source and music.
 
 
-anyways, here is a early release of "malloc".
+anyways, here is an early release of "malloc".
 
 
 
 Yet this showed up with minimal overhead. 
-4 Bytes per allocation, and 8 Bytes for the free list(array).
+4 Bytes per allocation, and 8 Bytes for a free element in the free list(array).
 
 Only 32bit yet. 64bit to come.
 
