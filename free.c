@@ -6,7 +6,7 @@
 
 //+doc 
 //+def
-MF void free_brk(void *m){
+void free(void *m){
 	if ( !m ) 
 		return;
 
