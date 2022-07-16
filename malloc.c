@@ -1,5 +1,6 @@
 #define CAST(var) (BRK_DATATYPE*)(var)
 #define BRKSZ sizeof(BRK_DATATYPE)
+#define CBRK _cbrk
 
 
 //+doc allocate via setting the brk
@@ -14,7 +15,7 @@
 // free_brk() free's all memory, which has been allocated with malloc_brk
 //+depends brk getbrk malloc_defs warn ml_freearray ml_malloc_brk_addmem
 //+def
-MF void* malloc_brk(ml_size_t size){
+void* malloc(ml_size_t size){
 	void *addr;
 	brk_data_t esize;
 	index_t reuse; 
@@ -34,13 +35,13 @@ MF void* malloc_brk(ml_size_t size){
 			// index prevfree is already stored
 		}
 	} else { // append new area
-		if ( ( mlgl->cbrk + size + BRKSZ >= mlgl->brk ) &&
-				!ml_malloc_brk_addmem((void*)(mlgl->cbrk+size+BRKSZ)) ) 
+		if ( ( _cbrk + size + BRKSZ >= mlgl->brk ) &&
+				!ml_malloc_brk_addmem((void*)(_cbrk+size+BRKSZ)) ) 
 			return(0);
 
-		addr = (void*)(mlgl->cbrk);
-		mlgl->cbrk += size;
-		*CAST(mlgl->cbrk) = 0;
+		addr = (void*)(_cbrk);
+		_cbrk += size;
+		*CAST(_cbrk) = 0;
 	}
 
 	*CAST(addr) = size;
