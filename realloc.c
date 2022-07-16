@@ -1,4 +1,4 @@
-void* realloc_brk(void *p, ml_size_t newsize){
+void* realloc_brk(void *p, size_t newsize){
 #define CAST(var) (BRK_DATATYPE*)(var)
 #define CUR CAST(m)
 #define BRKSZ sizeof(BRK_DATATYPE)
