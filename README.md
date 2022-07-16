@@ -8,9 +8,8 @@ now some bugs seem to be sneaked in somethere.
 
 With fuzzy testing, I do get random segfaults. 
 
-Currently I'm about to blame glibc .. Would it be possible,
-I do have gaps within the movement of the brk?
-It is anyways strange, after moving the brk from e.g. 4 to 400, accessing 200 says segfault.
+err. most possibly, theres something wrong.
+err. There's a bug. 
 
 I leave this online for now, the way it is.
 
