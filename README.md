@@ -1,6 +1,6 @@
 
 
-.. this still is some ork in progress.
+.. this is some ork with unwanted features in progress. 
 
 Due to another memory layout with glibc, I stripped 32bit support.
 So this is a 64bit version, with an overhead of 8Bytes per allocation.
