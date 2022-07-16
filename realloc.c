@@ -1,5 +1,5 @@
 //+def
-MF void* realloc_brk(void *p, ml_size_t newsize){
+MF void* realloc(void *p, ml_size_t newsize){
 #define CAST(var) (BRK_DATATYPE*)(var)
 #define CUR CAST(m)
 #define BRKSZ sizeof(BRK_DATATYPE)
