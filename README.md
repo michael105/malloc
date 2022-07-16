@@ -4,10 +4,10 @@
 
 Due to another memory layout with glibc, I stripped 32bit support.
 So this is a 64bit version, with an overhead of 8Bytes per allocation.
-However, in turn, while working with minilib (and an address layout below 2GB),
+However, in turn, while this implemenatation works with minilib (and an address layout below 2GB),
 now some bugs seem to be somethere.
 
-With fuzzy testing, I yet do get random segfaults. 
+With fuzzy testing, I do get random segfaults. 
 
 Currently I'm about to blame glibc .. Would it be possible,
 I do have gaps within the movement of the brk?
