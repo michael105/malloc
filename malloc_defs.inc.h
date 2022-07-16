@@ -1,14 +1,5 @@
 // definitions for malloc_brk and malloc_minibuf
 
-//+include
-//+def malloc_defs
-
-//+doc type of the minibuf
-// alignment and overhead are both sizeof(type)
-// unset(default) = unsigned short (16Bit)
-// set = unsigned int (32Bit)
-//+def MBUF_TYPE_INT 
-
 typedef unsigned int index_t;
 // bitsize-1 of maxarea (2GB), and addressable virtual memory
 #define BRK_DATATYPE unsigned int
