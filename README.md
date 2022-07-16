@@ -1,32 +1,25 @@
-Release early, release often.
-
-Once a wise man said.
 
 
-I guess, there's a difference between open source and music.
+.. this still is some ork in progress.
+
+Due to another memory layout with glibc, I stripped 32bit support.
+So this is a 64bit version, with an overhead of 8Bytes per allocation.
+However, in turn, while working with minilib (and an address layout below 2GB),
+now some bugs seem to be somethere.
+
+With fuzzy testing, I yet do get random segfaults. 
+
+Currently I'm about to blame glibc .. Would it be possible,
+I do have gaps within the movement of the brk?
 
 
-anyways, here is an early release of "malloc".
+I leave this online for now, anyways.
 
 
 
-Yet this showed up with minimal overhead. 
-4 Bytes per allocation, and 8 Bytes for a free element in the free list(array).
-
-Only 32bit yet. 64bit to come.
-
-This malloc implemention uses explicitely the brk for allocations,
-besides one dynamically growing map for the freelist.
 
 
-Yet I'm not that proud about the abstraction - its missing.
-To be more exact, I'd like to 1. have simple map calls for larger allocations,
-and some analysis about the usage and according placement also into maps would be great.
 
-Yet, there is a progressively growing brk implemented, to spare unneccessary syscalls.
-
-
-This malloc is fast. The free array shows up to be neglecticle in overhead.
 
 I do guess, beginning with ? 10.000 free elements, you should better look for another way
 of the memory management. (also using rep scasq assmbly instructions, sort of "optimized")
