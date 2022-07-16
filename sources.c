@@ -1,6 +1,6 @@
-#include "realloc.c"
-#include "malloc.c"
-#include "addmem.c"
 #include "ml_freearray.c"
 #include "ml_malloc_brk_movcbrk.c"
-
+#include "addmem.c"
+#include "malloc.c"
+#include "free.c"
+#include "realloc.c"
