@@ -1,12 +1,8 @@
-
-#define xxprintf {}
 #define CAST(var) (BRK_DATATYPE*)(var)
 #define CUR CAST(m)
 #define BRKSZ sizeof(BRK_DATATYPE)
 
-//+doc 
-//+def
-void free(void *m){
+void free_brk(void *m){
 	if ( !m ) 
 		return;
 
@@ -85,4 +81,3 @@ void free(void *m){
 #undef CUR
 #undef CAST
 #undef BRKSZ
-#undef xxprintf

@@ -1,3 +1,16 @@
+// decalarations and macros,
+
+
+void* malloc_brk(size_t size);
+void free_brk(void *m);
+void* realloc_brk(void *p, ml_size_t newsize);
+
+#define malloc malloc_brk
+#define free free_brk
+#define realloc realloc_brk
+
+
+
 // definitions 
 
 typedef unsigned int index_t;

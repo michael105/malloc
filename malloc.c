@@ -3,7 +3,7 @@
 #define CBRK _cbrk
 
 
-//+doc allocate via setting the brk
+// allocate via setting the brk
 // free and realloc can be used normally.
 // The intention of malloc_brk is for subsequent calls to realloc.
 // The saved data has not to be copied,
@@ -13,9 +13,7 @@
 // the allocated memory can also be free'd by setting the brk to the saved value
 // with brk(saved_brk)
 // free_brk() free's all memory, which has been allocated with malloc_brk
-//+depends brk getbrk malloc_defs warn ml_freearray ml_malloc_brk_addmem
-//+def
-void* malloc(ml_size_t size){
+void* malloc_brk(ml_size_t size){
 	void *addr;
 	brk_data_t esize;
 	index_t reuse; 
