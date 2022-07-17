@@ -1,12 +1,13 @@
 // copy overlapping areas, from upper to lower.
 // (s>d)
 // This does vector copy operations of longs, 64bit with amd64
-void memmovedown(void *d, void *s, size_t size){
+MF void memmovedown(void *d, void *s, ml_size_t size){
+#define ASSERT(exp) 
 	ASSERT(d<ULONG_MAX-sizeof(long));
 	ASSERT(d<s);
 
 	if ( d>=s )
-		exit(1);
+		ABORT;
 
 	void *e = d+size;
 
