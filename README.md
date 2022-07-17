@@ -1,19 +1,16 @@
 
 
-.. this is some ork in progress, with unwanted features.
+ork in progress.
 
-Due to another memory layout with glibc, I had to convert this to 64bit.
-However, in turn, while this implemenatation works with minilib (and an address layout below 2GB),
-now some bugs seem to be sneaked in somethere.
-
-With fuzzy testing, I do get random segfaults. 
-
-err. most possibly, theres something wrong.
-err. There's a bug. 
-
-I leave this online for now, the way it is.
+Currently my randomized test segfaults sometimes, but I cannot see any evident reason.
+the address is valid, and the readaccess shouldn't segfault.
+This could also be processor or kernel specific.
 
 
+Due to another memory layout with glibc, I had to convert this from 32bit to 64bit.
+However, in turn, while this implementation works for 32bit with minilib (and an address layout below 2GB),
+32bit doesn't work out with glibc or uclibc, there's another memory layout, and the break
+above the 32bit accessbile range.
 
 
 

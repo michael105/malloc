@@ -13,14 +13,16 @@
 // the allocated memory can also be free'd by setting the brk to the saved value
 // with brk(saved_brk)
 // free_brk() free's all memory, which has been allocated with malloc_brk
-void* malloc_brk(ml_size_t size){
+void* malloc_brk(size_t size){
 	void *addr;
 	brk_data_t esize;
 	index_t reuse; 
 
+	D(size);
 	// alignment and reserving space for the relative pointer/size and array index
 	size = ((size-1)& ~(BRKSZ-1))+(2*BRKSZ );
 
+	D(size);
 	// look for a fitting area
 	if (( reuse = ml_find(size,&addr,&esize) )){
 		if ( (esize - size) <= (2*BRKSZ) ){ // too less left
@@ -33,14 +35,15 @@ void* malloc_brk(ml_size_t size){
 			// index prevfree is already stored
 		}
 	} else { // append new area
-		if ( ( _cbrk + size + BRKSZ >= mlgl->brk ) &&
-				!ml_malloc_brk_addmem((void*)(_cbrk+size+BRKSZ)) ) 
+		if ( ( _cbrk + size + BRKSZ >= _brk ) &&
+				!ml_addmem((void*)(_cbrk+size+BRKSZ)) ) 
 			return(0);
 
 		addr = (void*)(_cbrk);
 		_cbrk += size;
 		*CAST(_cbrk) = 0;
 	}
+	D(size);
 
 	*CAST(addr) = size;
 	return( addr + BRKSZ );
