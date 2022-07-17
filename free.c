@@ -9,9 +9,11 @@ void free_brk(void *m){
 	// point to the size of the area
 	m -= BRKSZ;
 
-	printf("CBRK: %lx\n",_cbrk);
 	printf(" BRK: %lx\n",brk);
+	printf("CBRK: %lx\n",_cbrk);
 	printf("CUR:  %lx\n",(ulong*)m);
+
+	if ( (long)_cbrk - (long)m < 0 ){ printf(AC_RED"!!!!!!!!!!!!!");}
 	printf(AC_CYAN "CUR: %lx\n",*(long*)m);
 	if ( (*CUR & BRK_FREE) || (*CUR == 0) ){
 		warn("Double free or Overflow\n");
@@ -24,9 +26,11 @@ void free_brk(void *m){
 
 	// at the end of the current break
 	if ( m+size == (void*)_cbrk  ){
+		printf("===\n");
 		// remove prev, if free
 		if ( *CUR & BRK_PREVISFREE ){
-			index_t e = *(CUR-1);
+			index_t e = *(index_t*)(m-8);
+		D(e);
 			m = ml_get_addr(e);
 			ml_remove(e);
 		}
@@ -34,9 +38,12 @@ void free_brk(void *m){
 		_cbrk = (typeof(_cbrk))m;
 		*CUR = 0;
 
+		Dlx(_cbrk);
+		Dlx(m);
 		// release memory
 		if ( _brk - _cbrk > (preallocate>>2) ){
 			preallocate >>= 2;
+
 
 			// lowest possible value is BRK_PREALLOCATE
 			preallocate = ((preallocate-1) + BRK_PREALLOCATE) & ~(BRK_PREALLOCATE-1);
@@ -69,6 +76,8 @@ Dlx(_brk);
 		} else {
 			*CAST(m + size ) |= BRK_PREVISFREE;
 		}
+		if ( !e )
+			exit(7);
 		// write prevfree
 		*CAST(m + size - BRKSZ ) = e;
 		return;
@@ -83,8 +92,13 @@ Dlx(_brk);
 	}
 
 	index_t e = ml_add(m,*CUR);
+		if ( !e )
+			exit(8);
+
 	// store index
 	*CAST(m+*CUR - BRKSZ) = e;
+	ulong sz = *CUR;
+	Dl(sz);
 	*CAST(m+*CUR ) |= BRK_PREVISFREE;
 	*CUR = e | BRK_FREE;
 

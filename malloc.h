@@ -4,6 +4,7 @@
 
 #define D(v) printf(__FILE__ ": %d   %s " #v " %d\n",__LINE__,__func__,v)
 #define Dlx(v) printf(__FILE__ ": %d  %s " #v " %p\n",__LINE__,__func__,v)
+#define Dl(v) printf(__FILE__ ": %d  %s " #v " %lu\n",__LINE__,__func__,v)
 
 void* malloc_brk(size_t size);
 void free_brk(void *m);
@@ -83,6 +84,8 @@ struct ml_malloc_area{
 extern unsigned long  preallocate;
 extern unsigned long _cbrk;
 extern unsigned long _brk;
+extern unsigned long _brk_start;
+
 
 #define AC_NORM "\033[0;38;40m"
 #define AC_N "\033[0;38;40m"

@@ -1,6 +1,7 @@
  unsigned long preallocate;
  unsigned long _cbrk;
  unsigned long _brk;
+ unsigned long _brk_start;
 
 #define ASSERT(exp) 
 

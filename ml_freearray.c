@@ -50,11 +50,8 @@ size_t ml_remove(index_t index){
 	size_t size = PA->data[index];
 
 	PA->memfree -= PA->data[index];
-#ifdef X64
 	*(uint64_t*)(PA->data+index) = 0;
-#else
-	PA->data[index] = 0;
-#endif
+	//PA->data[index] = 0;
 	if ( index == PA->pos ){ // was at the end
 		PA->pos -= 2;
 		// shrink array down to first used element
@@ -159,18 +156,21 @@ index_t ml_add(void *addr, brk_data_t size){
 	index_t index = PA->pos+2;
 	if ( PA->freegaps > 0 ){ // > threshhold
 		// find empty element
-#ifdef ASM_amd64
 		brk_data_t* data = PA->data + 2;
 		index >>= 1;
 		asm volatile("repne scasq" : "+D"(data), "+c"(index) : "a"(0) : "cc");
 		index = (data - PA->_data); // index 
 
-		if(index>=PA->pos)
-			ERR("IND","index too high",EFAULT);
+		if ( index==0 ) 
+			exit(9);
+		if(index>=PA->pos){
+			write(2,"index too high\n",16);
+			exit(EFAULT);
+	}
 		PA->freegaps--;
-#endif
 	} else {
 		PA->pos+=2;
+		D(index);
 	}
 
 	PA->memfree += size;
