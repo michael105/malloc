@@ -18,7 +18,7 @@ void free_brk(void *m){
 	brk_data_t size = *CUR & BRK_V;
 
 	// at the end of the current break
-	if ( m+size == (void*)mlgl->cbrk  ){
+	if ( m+size == (void*)_cbrk  ){
 		// remove prev, if free
 		if ( *CUR & BRK_PREVISFREE ){
 			index_t e = *(CUR-1);
@@ -26,18 +26,18 @@ void free_brk(void *m){
 			ml_remove(e);
 		}
 
-		mlgl->cbrk = (typeof(mlgl->cbrk))m;
+		_cbrk = (typeof(_cbrk))m;
 		*CUR = 0;
 
 		// release memory
-		if ( mlgl->brk - mlgl->cbrk > (mlgl->brk_preallocate>>2) ){
-			mlgl->brk_preallocate >>= 2;
+		if ( _brk - _cbrk > (preallocate>>2) ){
+			preallocate >>= 2;
 
 			// lowest possible value is BRK_PREALLOCATE
-			mlgl->brk_preallocate = ((mlgl->brk_preallocate-1) + BRK_PREALLOCATE) & ~(BRK_PREALLOCATE-1);
+			preallocate = ((preallocate-1) + BRK_PREALLOCATE) & ~(BRK_PREALLOCATE-1);
 
 			// free
-			brk( (void*)((mlgl->cbrk + (BRK_PREALLOCATE +PAGESIZE-1) ) & (~(PAGESIZE-1))) );
+			brk( (void*)((_cbrk + (BRK_PREALLOCATE +PAGESIZE-1) ) & (~(PAGESIZE-1))) );
 		}
 		return;
 	}

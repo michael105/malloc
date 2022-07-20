@@ -24,11 +24,11 @@ int main(int argc, char **argv){
 
 	for ( int a = 0; a<REP; a++ ){
 		for ( int b = 0; b< ASIZE; b++ ){
-			m[b] = malloc((rand()&MEMSIZE)+1);
+			m[b] = malloc_brk((rand()&MEMSIZE)+1);
 			printf("mall addr, %d: %p\n",b,m[b]);
 			char *c = m[b];
 			long *i = (long*)(c-8);
-			printf("sz:  = %ld\n",*i);
+			//printf("sz:  = %ld\n",*i);
 			printf("sz i:  = %p\n",i);
 		}
 		memset(set,1,sizeof(memset));
@@ -37,9 +37,9 @@ int main(int argc, char **argv){
 			int t1 = rand()&(ASIZE-1);
 			int t2 = rand()&MEMSIZE;
 			if ( set[t1] )
-				free(m[t1]);
+				free_brk(m[t1]);
 			else 
-				m[t1] = malloc(t2);
+				m[t1] = malloc_brk(t2);
 			set[t1] = !set[t1];
 		}
 
@@ -49,7 +49,7 @@ int main(int argc, char **argv){
 			printf(AC_BLUE"free: %d\n"AC_NORM,b);
 			printf("m = %p\n",m[b]);
 			if ( set[b] )
-				free(m[b]);
+				free_brk(m[b]);
 		}
 
 	}

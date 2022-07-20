@@ -1,6 +1,6 @@
 //+doc move cbrk (malloc_brk internal)
 //+def 
-MF int ml_malloc_brk_addmem(void* brkmin){
+int ml_addmem(void* brkmin){
 		// calculate memory to preallocate
 		preallocate <<=1;
 		// grow progressively

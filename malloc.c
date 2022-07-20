@@ -33,8 +33,8 @@ void* malloc_brk(ml_size_t size){
 			// index prevfree is already stored
 		}
 	} else { // append new area
-		if ( ( _cbrk + size + BRKSZ >= mlgl->brk ) &&
-				!ml_malloc_brk_addmem((void*)(_cbrk+size+BRKSZ)) ) 
+		if ( ( _cbrk + size + BRKSZ >= _brk ) &&
+				!ml_addmem((void*)(_cbrk+size+BRKSZ)) ) 
 			return(0);
 
 		addr = (void*)(_cbrk);

@@ -38,21 +38,23 @@
 // the locality is advantegeous.
 //
 
-#define PA mlgl->freearray
+static struct ml_malloc_freearray *__freearray; 
+
+#define PA __freearray
 
 //+def
 struct ml_malloc_freearray* ml_freearray_new(){
 	// grows upwards  as well, despite the flag's naming
-	struct ml_malloc_freearray *m = (struct ml_malloc_freearray*) mmap(0,PAGESIZE,PROT_READ|PROT_WRITE,
+	__freearray = (struct ml_malloc_freearray*) mmap(0,PAGESIZE,PROT_READ|PROT_WRITE,
 			MAP_ANONYMOUS|MAP_PRIVATE|MAP_GROWSDOWN,-1,0);
-	return(m-PAGESIZE);
+	return(__freearray);
 }
 
 //+def
 ml_size_t ml_remove(index_t index){
 	ml_size_t size = PA->data[index];
 
-	mlgl->freeingaps -= PA->data[index];
+	PA->memfree -= PA->data[index];
 #ifdef X64
 	*(uint64_t*)(PA->data+index) = 0;
 #else
@@ -93,7 +95,7 @@ index_t ml_join(index_t lower, index_t upper, unsigned int *newsize){
 // return the address
 //+def
 void* ml_attach(unsigned int *size, index_t tolower){
-	mlgl->freeingaps += *size;
+	PA->memfree += *size;
 	PA->data[tolower] += *size;
 	*size = PA->data[tolower];
 	return((void*) (POINTER)(PA->data[tolower+1]));
@@ -102,7 +104,7 @@ void* ml_attach(unsigned int *size, index_t tolower){
 // attach area to free area above. move the address of the upper free area.
 //+def
 void ml_expand(unsigned int diff, index_t uppertomove){
-	mlgl->freeingaps += diff;
+	PA->memfree += diff;
 	PA->data[uppertomove]+=diff;
 	PA->data[uppertomove+1]-=diff; // move addr
 }
@@ -110,7 +112,7 @@ void ml_expand(unsigned int diff, index_t uppertomove){
 // shrink (and move upwards)
 //+def
 brk_data_t* ml_shrink(unsigned int diff, index_t e){
-	mlgl->freeingaps -= diff;
+	PA->memfree -= diff;
 	PA->data[e] -= diff; // save new size
 	PA->data[e+1] += diff; // move addr
 	return( (brk_data_t*)(ulong)PA->data[e+1] );
@@ -121,7 +123,7 @@ brk_data_t* ml_shrink(unsigned int diff, index_t e){
 // return the new area start (right of)
 //+def
 brk_data_t* ml_shrink_down(unsigned int diff, index_t e){
-	mlgl->freeingaps -= diff;
+	PA->memfree -= diff;
 	PA->data[e] -= diff; // save new size
 	//PA->data[e] += diff; // move addr
 	return( (brk_data_t*)(POINTER)(PA->data[e+1]+PA->data[e]) );
@@ -170,7 +172,7 @@ index_t ml_add(void *addr, unsigned int size){
 		PA->pos+=2;
 	}
 
-	mlgl->freeingaps += size;
+	PA->memfree += size;
 	PA->data[index] = size;
 	PA->data[index+1] =  (brk_data_t)((POINTER)addr); 
 	// eventually shift right -> 16GB addressable ("34bit")
@@ -182,7 +184,7 @@ index_t ml_add(void *addr, unsigned int size){
 // find best fitting free area, which is larger than size.
 //+def
 index_t ml_find(unsigned int size,void **addr,unsigned int *esize ){
-	if ( (size > PA->largestfree) || (size > mlgl->freeingaps) ){
+	if ( (size > PA->largestfree) || (size > PA->memfree) ){
 		return(0);
 	}
 	index_t _max = UINT_MAX,*bestfit = &_max,largest=0;
