@@ -1,17 +1,17 @@
 
 
-ork in progress. Might even don't compile currently.
+
+Currently this works only for address below 32bit,
+uclibc and glibc do have adresses above.
+(This is a split of minilib, with minilib the brk is below 32bit)
 
 
-Currently my randomized test segfaults sometimes, but I cannot see any evident reason.
-the address is valid, and the readaccess shouldn't segfault.
-This could also be processor or kernel specific.
+It would be possible to use relative addresses,
+but I cannot see enough of an advantage for the usage
+with glibc or the other libs. The spared memory
+might not outwage penalty of misaligned access, etc.
 
-
-Due to another memory layout with glibc, I had to convert this from 32bit to 64bit.
-However, in turn, while this implementation works for 32bit with minilib (and an address layout below 2GB),
-32bit doesn't work out with glibc or uclibc, there's another memory layout, and the break
-above the 32bit accessbile range.
+So I leave this at it is, going to fix the 64bit version.
 
 
 
@@ -23,7 +23,7 @@ I do guess, beginning with ? 10.000 free elements, you should better look for an
 of the memory management. (also using rep scasq assmbly instructions, sort of "optimized")
 
 
-I compared this to the kkmalloc implementation, in the question of speed there's no measurable
+I compared this to the kmalloc implementation, in the question of speed there's no measurable
 difference. However, this implementation uses 1/3 less memory, for a bunch of randomized allocations and free's.
 
 
